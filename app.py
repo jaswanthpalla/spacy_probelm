@@ -1,21 +1,20 @@
 import streamlit as st
 import spacy
-import importlib.util
 
-model_name = "en_core_web_sm"
+nlp = spacy.load("./en_core_web_sm")
 
-if importlib.util.find_spec(model_name) is None:
-    from spacy.cli import download
-    download(model_name)
+st.title("spaCy Streamlit App (3.8.0 + Python 3.13)")
 
-nlp = spacy.load(model_name)
-
-st.title("spaCy + Streamlit Demo")
-
-text = st.text_area("Enter text here", "Apple is looking at buying U.K. startup for $1 billion.")
+text = st.text_area("Enter text", "Apple is looking at buying U.K. startup for $1 billion")
 
 if st.button("Analyze"):
     doc = nlp(text)
-    st.write("Tokens and POS tags:")
+
+    st.subheader("Tokens and POS:")
     for token in doc:
-        st.write(f"{token.text} → {token.pos_}")
+        st.write(f"{token.text} → {token.pos_} ({token.dep_})")
+
+    if doc.ents:
+        st.subheader("Named Entities:")
+        for ent in doc.ents:
+            st.write(f"{ent.text} → {ent.label_}")
