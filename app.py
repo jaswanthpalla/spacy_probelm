@@ -13,4 +13,3 @@ if st.button("Analyze"):
     for token in doc:
         st.write(f"{token.text:<12} POS: {token.pos_} - DEP: {token.dep_}")
 
-
